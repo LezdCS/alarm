@@ -1,4 +1,6 @@
 
+import 'package:alarm/src/data/repositories/alarm_repository_impl.dart';
+import 'package:alarm/src/domain/usecases/alarm_usecase.dart';
 import 'package:get/get.dart';
 import 'package:get/get_instance/src/bindings_interface.dart';
 
@@ -13,6 +15,9 @@ class HomeBindings extends Bindings {
     Get.lazyPut<HomeViewController>(
           () => HomeViewController(
         homeEvents: HomeEvents(
+          alarmUseCase: AlarmUseCase(
+            alarmRepository: AlarmRepositoryImpl(),
+          ),
           settingsUseCase: SettingsUseCase(
             settingsRepository: SettingsRepositoryImpl(),
           ),

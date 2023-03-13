@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:get/get_navigation/get_navigation.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 
@@ -26,7 +27,7 @@ class HomeViewController extends GetxController {
     alarms.addAll([
       Alarm(
         id: 1,
-        time: DateTime.parse("2023-03-14 01:49:00"),
+        time: DateTime.parse("2023-03-14 02:20:00"),
         enabled: false,
         audioPath: "assets/audios/1.mp3",
         days: ["Mon", "Tue"],
@@ -59,24 +60,14 @@ class HomeViewController extends GetxController {
       ),
       type: "Sunny",
     ).obs;
-
-    currentPosition = await _determinePosition();
-    debugPrint("Current position: $currentPosition");
-    List<Placemark> placemarks = await placemarkFromCoordinates(
-        currentPosition!.latitude, currentPosition!.longitude);
-    debugPrint("City: ${placemarks[0].locality}");
-    // weather.location = placemarks[0];
-    //free API for weather
-    //https://open-meteo.com/en/docs#latitude=35.73&longitude=139.75&hourly=temperature_2m,relativehumidity_2m,apparent_temperature,precipitation_probability,precipitation,rain,snowfall,weathercode&daily=weathercode,temperature_2m_max,temperature_2m_min,apparent_temperature_max,apparent_temperature_min,sunrise,sunset,precipitation_sum,rain_sum,showers_sum,snowfall_sum&timezone=Asia%2FTokyo
   }
 
   @override
-  void onReady() {
+  void onReady() async {
     super.onReady();
 
     Timer.periodic(const Duration(minutes: 1), (timer) {
-      // homeEvents.updateWeather();
-      weather.refresh();
+      updateWeather();
     });
   }
 
@@ -89,9 +80,7 @@ class HomeViewController extends GetxController {
     await AndroidAlarmManager.oneShotAt(
       alarm.time,
       alarm.id,
-      (int id) async {
-        debugPrint("Alarm fired: $id");
-      },
+      callbackAlarm,
       wakeup: true,
       exact: true,
       allowWhileIdle: true,
@@ -105,9 +94,31 @@ class HomeViewController extends GetxController {
     debugPrint("Alarm set");
   }
 
+  @pragma('vm:entry-point')
+  static void callbackAlarm(int id) {
+    debugPrint("Alarm fired: $id");
+    // alarms.firstWhereOrNull((element) => element.id == id)?.enabled = false;
+  }
+
   Future cancelAlarm(Alarm alarm) async {
     await AndroidAlarmManager.cancel(alarm.id);
     debugPrint("Alarm cancelled");
+  }
+
+  Future updateWeather() async {
+    currentPosition = await _determinePosition();
+    debugPrint("Current position: $currentPosition");
+    homeEvents
+        .getWeather(
+      latitude: currentPosition!.latitude,
+      longitude: currentPosition!.longitude,
+    )
+        .then(
+      (value) => weather.value = value.data!,
+      onError: (error) {
+        debugPrint("Error: $error");
+      },
+    );
   }
 
   Future<Position> _determinePosition() async {
