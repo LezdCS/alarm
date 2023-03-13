@@ -9,6 +9,7 @@ class Alarm with _$Alarm {
   factory Alarm({
     required final int id,
     required DateTime time,
+    required String audioPath,
     required List<String> days,
     required bool enabled,
   }) = _Alarm;

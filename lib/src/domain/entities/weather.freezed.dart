@@ -14,10 +14,6 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
-Weather _$WeatherFromJson(Map<String, dynamic> json) {
-  return _Weather.fromJson(json);
-}
-
 /// @nodoc
 mixin _$Weather {
   int get temperature => throw _privateConstructorUsedError;
@@ -26,9 +22,8 @@ mixin _$Weather {
   int get humidity => throw _privateConstructorUsedError;
   String get type => throw _privateConstructorUsedError;
   DateTime get sunriseTime => throw _privateConstructorUsedError;
-  String get localization => throw _privateConstructorUsedError;
+  Placemark get location => throw _privateConstructorUsedError;
 
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $WeatherCopyWith<Weather> get copyWith => throw _privateConstructorUsedError;
 }
@@ -45,7 +40,7 @@ abstract class $WeatherCopyWith<$Res> {
       int humidity,
       String type,
       DateTime sunriseTime,
-      String localization});
+      Placemark location});
 }
 
 /// @nodoc
@@ -67,7 +62,7 @@ class _$WeatherCopyWithImpl<$Res, $Val extends Weather>
     Object? humidity = null,
     Object? type = null,
     Object? sunriseTime = null,
-    Object? localization = null,
+    Object? location = null,
   }) {
     return _then(_value.copyWith(
       temperature: null == temperature
@@ -94,10 +89,10 @@ class _$WeatherCopyWithImpl<$Res, $Val extends Weather>
           ? _value.sunriseTime
           : sunriseTime // ignore: cast_nullable_to_non_nullable
               as DateTime,
-      localization: null == localization
-          ? _value.localization
-          : localization // ignore: cast_nullable_to_non_nullable
-              as String,
+      location: null == location
+          ? _value.location
+          : location // ignore: cast_nullable_to_non_nullable
+              as Placemark,
     ) as $Val);
   }
 }
@@ -116,7 +111,7 @@ abstract class _$$_WeatherCopyWith<$Res> implements $WeatherCopyWith<$Res> {
       int humidity,
       String type,
       DateTime sunriseTime,
-      String localization});
+      Placemark location});
 }
 
 /// @nodoc
@@ -135,7 +130,7 @@ class __$$_WeatherCopyWithImpl<$Res>
     Object? humidity = null,
     Object? type = null,
     Object? sunriseTime = null,
-    Object? localization = null,
+    Object? location = null,
   }) {
     return _then(_$_Weather(
       temperature: null == temperature
@@ -162,16 +157,16 @@ class __$$_WeatherCopyWithImpl<$Res>
           ? _value.sunriseTime
           : sunriseTime // ignore: cast_nullable_to_non_nullable
               as DateTime,
-      localization: null == localization
-          ? _value.localization
-          : localization // ignore: cast_nullable_to_non_nullable
-              as String,
+      location: null == location
+          ? _value.location
+          : location // ignore: cast_nullable_to_non_nullable
+              as Placemark,
     ));
   }
 }
 
 /// @nodoc
-@JsonSerializable()
+
 class _$_Weather implements _Weather {
   const _$_Weather(
       {required this.temperature,
@@ -180,10 +175,7 @@ class _$_Weather implements _Weather {
       required this.humidity,
       required this.type,
       required this.sunriseTime,
-      required this.localization});
-
-  factory _$_Weather.fromJson(Map<String, dynamic> json) =>
-      _$$_WeatherFromJson(json);
+      required this.location});
 
   @override
   final int temperature;
@@ -198,11 +190,11 @@ class _$_Weather implements _Weather {
   @override
   final DateTime sunriseTime;
   @override
-  final String localization;
+  final Placemark location;
 
   @override
   String toString() {
-    return 'Weather(temperature: $temperature, maxTemperature: $maxTemperature, minTemperature: $minTemperature, humidity: $humidity, type: $type, sunriseTime: $sunriseTime, localization: $localization)';
+    return 'Weather(temperature: $temperature, maxTemperature: $maxTemperature, minTemperature: $minTemperature, humidity: $humidity, type: $type, sunriseTime: $sunriseTime, location: $location)';
   }
 
   @override
@@ -221,27 +213,19 @@ class _$_Weather implements _Weather {
             (identical(other.type, type) || other.type == type) &&
             (identical(other.sunriseTime, sunriseTime) ||
                 other.sunriseTime == sunriseTime) &&
-            (identical(other.localization, localization) ||
-                other.localization == localization));
+            (identical(other.location, location) ||
+                other.location == location));
   }
 
-  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, temperature, maxTemperature,
-      minTemperature, humidity, type, sunriseTime, localization);
+      minTemperature, humidity, type, sunriseTime, location);
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$_WeatherCopyWith<_$_Weather> get copyWith =>
       __$$_WeatherCopyWithImpl<_$_Weather>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$_WeatherToJson(
-      this,
-    );
-  }
 }
 
 abstract class _Weather implements Weather {
@@ -252,9 +236,7 @@ abstract class _Weather implements Weather {
       required final int humidity,
       required final String type,
       required final DateTime sunriseTime,
-      required final String localization}) = _$_Weather;
-
-  factory _Weather.fromJson(Map<String, dynamic> json) = _$_Weather.fromJson;
+      required final Placemark location}) = _$_Weather;
 
   @override
   int get temperature;
@@ -269,7 +251,7 @@ abstract class _Weather implements Weather {
   @override
   DateTime get sunriseTime;
   @override
-  String get localization;
+  Placemark get location;
   @override
   @JsonKey(ignore: true)
   _$$_WeatherCopyWith<_$_Weather> get copyWith =>

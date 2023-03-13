@@ -4,5 +4,4 @@ class HomeEvents {
   HomeEvents({required this.settingsUseCase});
 
   final SettingsUseCase settingsUseCase;
-
 }

@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:geocoding/geocoding.dart';
 
 part 'weather.freezed.dart';
-part 'weather.g.dart';
 
 @freezed
 class Weather with _$Weather {
@@ -13,9 +13,6 @@ class Weather with _$Weather {
     required int humidity,
     required String type,
     required DateTime sunriseTime,
-    required String localization,
+    required Placemark location,
   }) = _Weather;
-
-  factory Weather.fromJson(Map<String, Object?> json)
-  => _$WeatherFromJson(json);
 }

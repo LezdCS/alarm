@@ -14,6 +14,10 @@ class AlarmCard extends GetView {
 
   @override
   Widget build(BuildContext context) {
+    List dateTimeSplit = alarm.time.toString().split(" ");
+    String hour = dateTimeSplit[1].split(":")[0];
+    String minutes = dateTimeSplit[1].split(":")[1].substring(0, 2);
+
     return Container(
       width: double.infinity,
       height: 120,
@@ -34,23 +38,28 @@ class AlarmCard extends GetView {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "${alarm.time.hour}:${alarm.time.minute}",
+                      "$hour:$minutes",
                       style: const TextStyle(
                         fontSize: 30,
                       ),
                     ),
                     Switch(
-                        value: alarm.enabled,
-                        onChanged: (state) {
-                          homeViewController.alarms
-                              .firstWhere(
-                                  (element) => alarm.id == element.id)
-                              .enabled = !alarm.enabled;
-                          homeViewController.alarms.refresh();
-                        },
-                        activeColor: Colors.white,
-                        activeTrackColor: Theme.of(context).colorScheme.primary,
-                      ),
+                      value: alarm.enabled,
+                      onChanged: (state) {
+                        homeViewController.alarms
+                            .firstWhere((element) => alarm.id == element.id)
+                            .enabled = !alarm.enabled;
+                        homeViewController.alarms.refresh();
+
+                        if (state) {
+                          homeViewController.setAlarm(alarm);
+                        } else {
+                          homeViewController.cancelAlarm(alarm);
+                        }
+                      },
+                      activeColor: Colors.white,
+                      activeTrackColor: Theme.of(context).colorScheme.primary,
+                    ),
                   ],
                 ),
               ),

@@ -18,9 +18,12 @@ class HomeView extends GetView<HomeViewController> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              WeatherCard(
-                weather: controller.weather,
-                firstAlarm: controller.alarms.value.first,
+              Obx(
+                () => WeatherCard(
+                  weather: controller.weather.value,
+                  firstAlarm: controller.alarms.value
+                      .firstWhereOrNull((element) => element.enabled),
+                ),
               ),
               Container(
                 margin: const EdgeInsets.only(left: 20.0, right: 20.0),

@@ -23,6 +23,8 @@ mixin _$Alarm {
   int get id => throw _privateConstructorUsedError;
   DateTime get time => throw _privateConstructorUsedError;
   set time(DateTime value) => throw _privateConstructorUsedError;
+  String get audioPath => throw _privateConstructorUsedError;
+  set audioPath(String value) => throw _privateConstructorUsedError;
   List<String> get days => throw _privateConstructorUsedError;
   set days(List<String> value) => throw _privateConstructorUsedError;
   bool get enabled => throw _privateConstructorUsedError;
@@ -38,7 +40,12 @@ abstract class $AlarmCopyWith<$Res> {
   factory $AlarmCopyWith(Alarm value, $Res Function(Alarm) then) =
       _$AlarmCopyWithImpl<$Res, Alarm>;
   @useResult
-  $Res call({int id, DateTime time, List<String> days, bool enabled});
+  $Res call(
+      {int id,
+      DateTime time,
+      String audioPath,
+      List<String> days,
+      bool enabled});
 }
 
 /// @nodoc
@@ -56,6 +63,7 @@ class _$AlarmCopyWithImpl<$Res, $Val extends Alarm>
   $Res call({
     Object? id = null,
     Object? time = null,
+    Object? audioPath = null,
     Object? days = null,
     Object? enabled = null,
   }) {
@@ -68,6 +76,10 @@ class _$AlarmCopyWithImpl<$Res, $Val extends Alarm>
           ? _value.time
           : time // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      audioPath: null == audioPath
+          ? _value.audioPath
+          : audioPath // ignore: cast_nullable_to_non_nullable
+              as String,
       days: null == days
           ? _value.days
           : days // ignore: cast_nullable_to_non_nullable
@@ -86,7 +98,12 @@ abstract class _$$_AlarmCopyWith<$Res> implements $AlarmCopyWith<$Res> {
       __$$_AlarmCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int id, DateTime time, List<String> days, bool enabled});
+  $Res call(
+      {int id,
+      DateTime time,
+      String audioPath,
+      List<String> days,
+      bool enabled});
 }
 
 /// @nodoc
@@ -100,6 +117,7 @@ class __$$_AlarmCopyWithImpl<$Res> extends _$AlarmCopyWithImpl<$Res, _$_Alarm>
   $Res call({
     Object? id = null,
     Object? time = null,
+    Object? audioPath = null,
     Object? days = null,
     Object? enabled = null,
   }) {
@@ -112,6 +130,10 @@ class __$$_AlarmCopyWithImpl<$Res> extends _$AlarmCopyWithImpl<$Res, _$_Alarm>
           ? _value.time
           : time // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      audioPath: null == audioPath
+          ? _value.audioPath
+          : audioPath // ignore: cast_nullable_to_non_nullable
+              as String,
       days: null == days
           ? _value.days
           : days // ignore: cast_nullable_to_non_nullable
@@ -130,6 +152,7 @@ class _$_Alarm implements _Alarm {
   _$_Alarm(
       {required this.id,
       required this.time,
+      required this.audioPath,
       required this.days,
       required this.enabled});
 
@@ -141,13 +164,15 @@ class _$_Alarm implements _Alarm {
   @override
   DateTime time;
   @override
+  String audioPath;
+  @override
   List<String> days;
   @override
   bool enabled;
 
   @override
   String toString() {
-    return 'Alarm(id: $id, time: $time, days: $days, enabled: $enabled)';
+    return 'Alarm(id: $id, time: $time, audioPath: $audioPath, days: $days, enabled: $enabled)';
   }
 
   @JsonKey(ignore: true)
@@ -168,6 +193,7 @@ abstract class _Alarm implements Alarm {
   factory _Alarm(
       {required final int id,
       required DateTime time,
+      required String audioPath,
       required List<String> days,
       required bool enabled}) = _$_Alarm;
 
@@ -178,6 +204,9 @@ abstract class _Alarm implements Alarm {
   @override
   DateTime get time;
   set time(DateTime value);
+  @override
+  String get audioPath;
+  set audioPath(String value);
   @override
   List<String> get days;
   set days(List<String> value);

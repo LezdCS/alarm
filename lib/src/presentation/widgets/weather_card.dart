@@ -1,24 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:get/get_state_manager/src/simple/get_view.dart';
 
 import '../../domain/entities/alarm.dart';
 import '../../domain/entities/weather.dart';
 
 class WeatherCard extends StatelessWidget {
   final Weather weather;
-  final Alarm firstAlarm;
+  final Alarm? firstAlarm;
 
   WeatherCard({
     required this.weather,
     required this.firstAlarm,
   });
 
-  hours(Duration d) =>  d.toString().substring(0, 2);
-  minutes(Duration d) => d.toString().substring(3, 5);
+  hours(Duration d) =>  d.toString().split(':')[0];
+  minutes(Duration d) => d.toString().split(':')[1];
 
   @override
   Widget build(BuildContext context) {
-    Duration d = firstAlarm.time.difference(DateTime.now());
+    Duration? d = firstAlarm?.time.difference(DateTime.now());
     return Container(
         width: double.infinity,
         padding: const EdgeInsets.all(10.0),
@@ -38,7 +37,7 @@ class WeatherCard extends StatelessWidget {
                 children: [
                   const Text("Ring in"),
                   Text(
-                    "${hours(d)}hrs ${minutes(d)}mins",
+                    firstAlarm != null ? "${hours(d!)}hrs ${minutes(d)}mins" : "No alarm",
                     style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   TextButton(
@@ -98,16 +97,16 @@ class WeatherCard extends StatelessWidget {
                     ],
                   ),
                   RichText(
-                    text: const TextSpan(
+                    text: TextSpan(
                       children: [
-                        WidgetSpan(
+                        const WidgetSpan(
                           child: Icon(
                             Icons.pin_drop,
                             color: Colors.white,
                             size: 20.0,
                           ),
                         ),
-                        TextSpan(text: "Komagome"),
+                        TextSpan(text: weather.location.locality),
                       ],
                     ),
                   ),
