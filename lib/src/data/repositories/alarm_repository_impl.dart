@@ -25,16 +25,16 @@ class AlarmRepositoryImpl extends AlarmRepository {
 
   @override
   Future<DataState<Weather>> getWeather(
-      double latitude, double longitude) async {
+      double latitude, double longitude, DateTime alarmTime) async {
     final dio = Dio();
     try {
+      String timezone = "Asia/Tokyo";
       final response = await dio.get(
-        "https://open-meteo.com/en/docs#latitude=$latitude&longitude=$longitude&hourly=temperature_2m,relativehumidity_2m,apparent_temperature,precipitation_probability,precipitation,rain,snowfall,weathercode&daily=weathercode,temperature_2m_max,temperature_2m_min,apparent_temperature_max,apparent_temperature_min,sunrise,sunset,precipitation_sum,rain_sum,showers_sum,snowfall_sum&timezone=Asia%2FTokyo",
+        "https://open-meteo.com/en/docs#latitude=$latitude&longitude=$longitude&hourly=temperature_2m,relativehumidity_2m,apparent_temperature,precipitation_probability,precipitation,rain,snowfall,weathercode&daily=weathercode,temperature_2m_max,temperature_2m_min,apparent_temperature_max,apparent_temperature_min,sunrise,sunset,precipitation_sum,rain_sum,showers_sum,snowfall_sum&timezone=$timezone",
       );
       // debugPrint("Response: ${response.data}");
       List<Placemark> placemarks =
           await placemarkFromCoordinates(latitude, longitude);
-      debugPrint("City: ${placemarks[0].locality}");
       Weather weather = Weather(
         temperature: 10,
         maxTemperature: 13,
@@ -42,7 +42,7 @@ class AlarmRepositoryImpl extends AlarmRepository {
         humidity: 90,
         sunriseTime: DateTime.now(),
         location: placemarks[0],
-        type: "Rainy",
+        type: WeatherType.clear,
       );
       return DataSuccess(weather);
     } catch (e) {

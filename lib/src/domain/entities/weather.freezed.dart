@@ -20,7 +20,7 @@ mixin _$Weather {
   int get maxTemperature => throw _privateConstructorUsedError;
   int get minTemperature => throw _privateConstructorUsedError;
   int get humidity => throw _privateConstructorUsedError;
-  String get type => throw _privateConstructorUsedError;
+  WeatherType get type => throw _privateConstructorUsedError;
   DateTime get sunriseTime => throw _privateConstructorUsedError;
   Placemark get location => throw _privateConstructorUsedError;
 
@@ -38,7 +38,7 @@ abstract class $WeatherCopyWith<$Res> {
       int maxTemperature,
       int minTemperature,
       int humidity,
-      String type,
+      WeatherType type,
       DateTime sunriseTime,
       Placemark location});
 }
@@ -84,7 +84,7 @@ class _$WeatherCopyWithImpl<$Res, $Val extends Weather>
       type: null == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
-              as String,
+              as WeatherType,
       sunriseTime: null == sunriseTime
           ? _value.sunriseTime
           : sunriseTime // ignore: cast_nullable_to_non_nullable
@@ -109,7 +109,7 @@ abstract class _$$_WeatherCopyWith<$Res> implements $WeatherCopyWith<$Res> {
       int maxTemperature,
       int minTemperature,
       int humidity,
-      String type,
+      WeatherType type,
       DateTime sunriseTime,
       Placemark location});
 }
@@ -152,7 +152,7 @@ class __$$_WeatherCopyWithImpl<$Res>
       type: null == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
-              as String,
+              as WeatherType,
       sunriseTime: null == sunriseTime
           ? _value.sunriseTime
           : sunriseTime // ignore: cast_nullable_to_non_nullable
@@ -167,7 +167,7 @@ class __$$_WeatherCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_Weather implements _Weather {
+class _$_Weather extends _Weather {
   const _$_Weather(
       {required this.temperature,
       required this.maxTemperature,
@@ -175,7 +175,8 @@ class _$_Weather implements _Weather {
       required this.humidity,
       required this.type,
       required this.sunriseTime,
-      required this.location});
+      required this.location})
+      : super._();
 
   @override
   final int temperature;
@@ -186,7 +187,7 @@ class _$_Weather implements _Weather {
   @override
   final int humidity;
   @override
-  final String type;
+  final WeatherType type;
   @override
   final DateTime sunriseTime;
   @override
@@ -228,15 +229,16 @@ class _$_Weather implements _Weather {
       __$$_WeatherCopyWithImpl<_$_Weather>(this, _$identity);
 }
 
-abstract class _Weather implements Weather {
+abstract class _Weather extends Weather {
   const factory _Weather(
       {required final int temperature,
       required final int maxTemperature,
       required final int minTemperature,
       required final int humidity,
-      required final String type,
+      required final WeatherType type,
       required final DateTime sunriseTime,
       required final Placemark location}) = _$_Weather;
+  const _Weather._() : super._();
 
   @override
   int get temperature;
@@ -247,7 +249,7 @@ abstract class _Weather implements Weather {
   @override
   int get humidity;
   @override
-  String get type;
+  WeatherType get type;
   @override
   DateTime get sunriseTime;
   @override

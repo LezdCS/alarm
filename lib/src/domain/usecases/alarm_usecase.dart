@@ -5,13 +5,17 @@ import '../repositories/alarm_repository.dart';
 
 class AlarmUseCase {
   final AlarmRepository alarmRepository;
+
   AlarmUseCase({required this.alarmRepository});
 
   Future<DataState<List<Alarm>>> getAlarms() {
     return alarmRepository.getAlarms();
   }
 
-  Future<DataState<Weather>> getWeather({required double latitude, required double longitude}) {
-    return alarmRepository.getWeather(latitude, longitude);
+  Future<DataState<Weather>> getWeather(
+      {required double latitude,
+      required double longitude,
+      required DateTime alarmTime}) {
+    return alarmRepository.getWeather(latitude, longitude, alarmTime);
   }
 }

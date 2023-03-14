@@ -25,10 +25,10 @@ mixin _$Alarm {
   set time(DateTime value) => throw _privateConstructorUsedError;
   String get audioPath => throw _privateConstructorUsedError;
   set audioPath(String value) => throw _privateConstructorUsedError;
-  List<String> get days => throw _privateConstructorUsedError;
-  set days(List<String> value) => throw _privateConstructorUsedError;
   bool get enabled => throw _privateConstructorUsedError;
   set enabled(bool value) => throw _privateConstructorUsedError;
+  List<Days> get daysToRepeat => throw _privateConstructorUsedError;
+  set daysToRepeat(List<Days> value) => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -44,8 +44,8 @@ abstract class $AlarmCopyWith<$Res> {
       {int id,
       DateTime time,
       String audioPath,
-      List<String> days,
-      bool enabled});
+      bool enabled,
+      List<Days> daysToRepeat});
 }
 
 /// @nodoc
@@ -64,8 +64,8 @@ class _$AlarmCopyWithImpl<$Res, $Val extends Alarm>
     Object? id = null,
     Object? time = null,
     Object? audioPath = null,
-    Object? days = null,
     Object? enabled = null,
+    Object? daysToRepeat = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -80,14 +80,14 @@ class _$AlarmCopyWithImpl<$Res, $Val extends Alarm>
           ? _value.audioPath
           : audioPath // ignore: cast_nullable_to_non_nullable
               as String,
-      days: null == days
-          ? _value.days
-          : days // ignore: cast_nullable_to_non_nullable
-              as List<String>,
       enabled: null == enabled
           ? _value.enabled
           : enabled // ignore: cast_nullable_to_non_nullable
               as bool,
+      daysToRepeat: null == daysToRepeat
+          ? _value.daysToRepeat
+          : daysToRepeat // ignore: cast_nullable_to_non_nullable
+              as List<Days>,
     ) as $Val);
   }
 }
@@ -102,8 +102,8 @@ abstract class _$$_AlarmCopyWith<$Res> implements $AlarmCopyWith<$Res> {
       {int id,
       DateTime time,
       String audioPath,
-      List<String> days,
-      bool enabled});
+      bool enabled,
+      List<Days> daysToRepeat});
 }
 
 /// @nodoc
@@ -118,8 +118,8 @@ class __$$_AlarmCopyWithImpl<$Res> extends _$AlarmCopyWithImpl<$Res, _$_Alarm>
     Object? id = null,
     Object? time = null,
     Object? audioPath = null,
-    Object? days = null,
     Object? enabled = null,
+    Object? daysToRepeat = null,
   }) {
     return _then(_$_Alarm(
       id: null == id
@@ -134,14 +134,14 @@ class __$$_AlarmCopyWithImpl<$Res> extends _$AlarmCopyWithImpl<$Res, _$_Alarm>
           ? _value.audioPath
           : audioPath // ignore: cast_nullable_to_non_nullable
               as String,
-      days: null == days
-          ? _value.days
-          : days // ignore: cast_nullable_to_non_nullable
-              as List<String>,
       enabled: null == enabled
           ? _value.enabled
           : enabled // ignore: cast_nullable_to_non_nullable
               as bool,
+      daysToRepeat: null == daysToRepeat
+          ? _value.daysToRepeat
+          : daysToRepeat // ignore: cast_nullable_to_non_nullable
+              as List<Days>,
     ));
   }
 }
@@ -153,8 +153,8 @@ class _$_Alarm implements _Alarm {
       {required this.id,
       required this.time,
       required this.audioPath,
-      required this.days,
-      required this.enabled});
+      required this.enabled,
+      required this.daysToRepeat});
 
   factory _$_Alarm.fromJson(Map<String, dynamic> json) =>
       _$$_AlarmFromJson(json);
@@ -166,13 +166,13 @@ class _$_Alarm implements _Alarm {
   @override
   String audioPath;
   @override
-  List<String> days;
-  @override
   bool enabled;
+  @override
+  List<Days> daysToRepeat;
 
   @override
   String toString() {
-    return 'Alarm(id: $id, time: $time, audioPath: $audioPath, days: $days, enabled: $enabled)';
+    return 'Alarm(id: $id, time: $time, audioPath: $audioPath, enabled: $enabled, daysToRepeat: $daysToRepeat)';
   }
 
   @JsonKey(ignore: true)
@@ -194,8 +194,8 @@ abstract class _Alarm implements Alarm {
       {required final int id,
       required DateTime time,
       required String audioPath,
-      required List<String> days,
-      required bool enabled}) = _$_Alarm;
+      required bool enabled,
+      required List<Days> daysToRepeat}) = _$_Alarm;
 
   factory _Alarm.fromJson(Map<String, dynamic> json) = _$_Alarm.fromJson;
 
@@ -208,11 +208,11 @@ abstract class _Alarm implements Alarm {
   String get audioPath;
   set audioPath(String value);
   @override
-  List<String> get days;
-  set days(List<String> value);
-  @override
   bool get enabled;
   set enabled(bool value);
+  @override
+  List<Days> get daysToRepeat;
+  set daysToRepeat(List<Days> value);
   @override
   @JsonKey(ignore: true)
   _$$_AlarmCopyWith<_$_Alarm> get copyWith =>

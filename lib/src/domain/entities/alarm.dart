@@ -10,10 +10,12 @@ class Alarm with _$Alarm {
     required final int id,
     required DateTime time,
     required String audioPath,
-    required List<String> days,
     required bool enabled,
+    required List<Days> daysToRepeat,
   }) = _Alarm;
 
   factory Alarm.fromJson(Map<String, Object?> json)
   => _$AlarmFromJson(json);
 }
+
+enum Days { monday, tuesday, wednesday, thursday, friday, saturday, sunday}

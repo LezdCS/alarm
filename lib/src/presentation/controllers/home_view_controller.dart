@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
+import 'package:device_calendar/device_calendar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:get/get_navigation/get_navigation.dart';
@@ -19,6 +20,7 @@ class HomeViewController extends GetxController {
   RxList<Alarm> alarms = <Alarm>[].obs;
   late Rx<Weather> weather;
   late Position? currentPosition;
+  late RxList<Event> events;
 
   @override
   void onInit() async {
@@ -30,14 +32,14 @@ class HomeViewController extends GetxController {
         time: DateTime.parse("2023-03-14 02:20:00"),
         enabled: false,
         audioPath: "assets/audios/1.mp3",
-        days: ["Mon", "Tue"],
+        daysToRepeat: [Days.monday, Days.thursday],
       ),
       Alarm(
         id: 2,
         time: DateTime.now(),
         enabled: false,
         audioPath: "assets/audios/1.mp3",
-        days: ["Fri"],
+        daysToRepeat: [],
       ),
     ]);
 
@@ -58,7 +60,7 @@ class HomeViewController extends GetxController {
         subThoroughfare: "Tokyo",
         thoroughfare: "Tokyo",
       ),
-      type: "Sunny",
+      type: WeatherType.clear,
     ).obs;
   }
 
@@ -66,7 +68,10 @@ class HomeViewController extends GetxController {
   void onReady() async {
     super.onReady();
 
-    Timer.periodic(const Duration(minutes: 1), (timer) {
+    updateWeather();
+    getCalendarsEvents().then((List<Event> value) => events.value = value);
+
+    Timer.periodic(const Duration(minutes: 5), (timer) {
       updateWeather();
     });
   }
@@ -77,6 +82,19 @@ class HomeViewController extends GetxController {
   }
 
   Future setAlarm(Alarm alarm) async {
+    DateTime alarmTime = alarm.time;
+
+    if (alarm.time.isBefore(DateTime.now())) {
+      DateTime now = DateTime.now();
+      DateTime t = now.add(const Duration(days: 1));
+      if (alarm.time.day != now.day) {
+        t = now;
+      }
+      alarmTime =
+          DateTime(t.year, t.month, t.day, alarm.time.hour, alarm.time.minute);
+      alarms.firstWhere((element) => element.id == alarm.id).time = alarmTime;
+    }
+
     await AndroidAlarmManager.oneShotAt(
       alarm.time,
       alarm.id,
@@ -97,7 +115,7 @@ class HomeViewController extends GetxController {
   @pragma('vm:entry-point')
   static void callbackAlarm(int id) {
     debugPrint("Alarm fired: $id");
-    // alarms.firstWhereOrNull((element) => element.id == id)?.enabled = false;
+    // alarms.firstWhereOr  Null((element) => element.id == id)?.enabled = false;
   }
 
   Future cancelAlarm(Alarm alarm) async {
@@ -107,11 +125,13 @@ class HomeViewController extends GetxController {
 
   Future updateWeather() async {
     currentPosition = await _determinePosition();
-    debugPrint("Current position: $currentPosition");
     homeEvents
         .getWeather(
       latitude: currentPosition!.latitude,
       longitude: currentPosition!.longitude,
+      alarmTime:
+          alarms.value.firstWhereOrNull((element) => element.enabled)?.time ??
+              DateTime.now(),
     )
         .then(
       (value) => weather.value = value.data!,
@@ -119,6 +139,33 @@ class HomeViewController extends GetxController {
         debugPrint("Error: $error");
       },
     );
+  }
+
+  Future<List<Event>> getCalendarsEvents() async {
+
+    List<Event> events = [];
+
+    DeviceCalendarPlugin deviceCalendarPlugin = DeviceCalendarPlugin();
+    await deviceCalendarPlugin.requestPermissions();
+    deviceCalendarPlugin.retrieveCalendars().then((value) {
+      value.data?.forEach((Calendar calendar) {
+        debugPrint("Calendar: ${calendar.name}");
+        deviceCalendarPlugin
+            .retrieveEvents(
+            calendar.id,
+            RetrieveEventsParams(
+              startDate: DateTime.now(),
+              endDate: DateTime.now().add(const Duration(days: 7)),
+            ))
+            .then((value) {
+          value.data?.forEach((Event event) {
+            events.add(event);
+          });
+        });
+      });
+    });
+
+    return events;
   }
 
   Future<Position> _determinePosition() async {

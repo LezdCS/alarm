@@ -9,7 +9,11 @@ class HomeEvents {
   final SettingsUseCase settingsUseCase;
   final AlarmUseCase alarmUseCase;
 
-  Future<DataState<Weather>> getWeather({required double latitude, required double longitude}) {
-    return alarmUseCase.getWeather(latitude: latitude, longitude: longitude);
+  Future<DataState<Weather>> getWeather(
+      {required double latitude,
+      required double longitude,
+      required DateTime alarmTime}) {
+    return alarmUseCase.getWeather(
+        latitude: latitude, longitude: longitude, alarmTime: alarmTime);
   }
 }

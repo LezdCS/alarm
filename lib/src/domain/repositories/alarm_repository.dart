@@ -9,5 +9,6 @@ abstract class AlarmRepository {
   Future<DataState<Weather>> getWeather(
     double latitude,
     double longitude,
+    DateTime alarmTime,
   );
 }
