@@ -14,6 +14,7 @@ _$_Alarm _$$_AlarmFromJson(Map<String, dynamic> json) => _$_Alarm(
       daysToRepeat: (json['daysToRepeat'] as List<dynamic>)
           .map((e) => $enumDecode(_$DaysEnumMap, e))
           .toList(),
+      events: json['events'] as List<dynamic>,
     );
 
 Map<String, dynamic> _$$_AlarmToJson(_$_Alarm instance) => <String, dynamic>{
@@ -23,6 +24,7 @@ Map<String, dynamic> _$$_AlarmToJson(_$_Alarm instance) => <String, dynamic>{
       'enabled': instance.enabled,
       'daysToRepeat':
           instance.daysToRepeat.map((e) => _$DaysEnumMap[e]!).toList(),
+      'events': instance.events,
     };
 
 const _$DaysEnumMap = {

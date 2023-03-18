@@ -12,6 +12,7 @@ class Alarm with _$Alarm {
     required String audioPath,
     required bool enabled,
     required List<Days> daysToRepeat,
+    required List events,
   }) = _Alarm;
 
   factory Alarm.fromJson(Map<String, Object?> json)

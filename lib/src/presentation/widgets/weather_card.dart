@@ -1,3 +1,4 @@
+import 'package:device_calendar/device_calendar.dart';
 import 'package:flutter/material.dart';
 
 import '../../domain/entities/alarm.dart';
@@ -49,7 +50,7 @@ class WeatherCard extends StatelessWidget {
                         margin: const EdgeInsets.only(top: 8.0),
                         width: double.infinity,
                         color: Theme.of(context).colorScheme.onTertiary,
-                        child: const Text("No events"),
+                        child: Text(firstAlarm?.events.length.toString() ?? ""),
                       ),
                     )
                   ],

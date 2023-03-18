@@ -75,7 +75,7 @@ class AlarmCard extends GetView {
                   children: [
                     // Text(alarm.days.join(", ")),
                     Text(alarm.daysToRepeat.isEmpty ? "Tomorrow" : "daystowrite"),
-                    Text("2 events"),
+                    Text("${alarm.events.length} events"),
                     const Icon(Icons.more_horiz),
                   ],
                 ),

@@ -20,7 +20,6 @@ class HomeViewController extends GetxController {
   RxList<Alarm> alarms = <Alarm>[].obs;
   late Rx<Weather> weather;
   late Position? currentPosition;
-  late RxList<Event> events;
 
   @override
   void onInit() async {
@@ -29,17 +28,19 @@ class HomeViewController extends GetxController {
     alarms.addAll([
       Alarm(
         id: 1,
-        time: DateTime.parse("2023-03-14 02:20:00"),
+        time: DateTime.parse("2023-03-18 02:20:00"),
         enabled: false,
         audioPath: "assets/audios/1.mp3",
         daysToRepeat: [Days.monday, Days.thursday],
+        events: [],
       ),
       Alarm(
         id: 2,
-        time: DateTime.now(),
+        time: DateTime.parse("2023-03-20 02:20:00"),
         enabled: false,
         audioPath: "assets/audios/1.mp3",
         daysToRepeat: [],
+        events: [],
       ),
     ]);
 
@@ -69,7 +70,18 @@ class HomeViewController extends GetxController {
     super.onReady();
 
     updateWeather();
-    getCalendarsEvents().then((List<Event> value) => events.value = value);
+    getCalendarsEvents().then((List<Event> value) => {
+          for (Alarm alarm in alarms)
+            {
+              for (Event event in value)
+                {
+                  if (event.start!.difference(alarm.time).inDays == 0)
+                    {
+                      alarm.events.add(event),
+                    }
+                }
+            }
+        });
 
     Timer.periodic(const Duration(minutes: 5), (timer) {
       updateWeather();
@@ -115,7 +127,7 @@ class HomeViewController extends GetxController {
   @pragma('vm:entry-point')
   static void callbackAlarm(int id) {
     debugPrint("Alarm fired: $id");
-    // alarms.firstWhereOr  Null((element) => element.id == id)?.enabled = false;
+    // alarms.firstWhereOrNull((element) => element.id == id)?.enabled = false;
   }
 
   Future cancelAlarm(Alarm alarm) async {
@@ -142,28 +154,29 @@ class HomeViewController extends GetxController {
   }
 
   Future<List<Event>> getCalendarsEvents() async {
-
     List<Event> events = [];
 
     DeviceCalendarPlugin deviceCalendarPlugin = DeviceCalendarPlugin();
     await deviceCalendarPlugin.requestPermissions();
-    deviceCalendarPlugin.retrieveCalendars().then((value) {
-      value.data?.forEach((Calendar calendar) {
-        debugPrint("Calendar: ${calendar.name}");
-        deviceCalendarPlugin
-            .retrieveEvents(
-            calendar.id,
-            RetrieveEventsParams(
-              startDate: DateTime.now(),
-              endDate: DateTime.now().add(const Duration(days: 7)),
-            ))
-            .then((value) {
-          value.data?.forEach((Event event) {
-            events.add(event);
-          });
-        });
-      });
+    List<Calendar> c =
+        await deviceCalendarPlugin.retrieveCalendars().then((value) {
+      return value.data!;
     });
+
+    for (Calendar element in c) {
+      List<Event> e = await deviceCalendarPlugin
+          .retrieveEvents(
+        element.id,
+        RetrieveEventsParams(
+          startDate: DateTime.now(),
+          endDate: DateTime.now().add(const Duration(days: 7)),
+        ),
+      )
+          .then((value) {
+        return value.data!;
+      });
+      events.addAll(e);
+    }
 
     return events;
   }
