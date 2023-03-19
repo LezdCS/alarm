@@ -46,11 +46,6 @@ class AlarmCard extends GetView {
                     Switch(
                       value: alarm.enabled,
                       onChanged: (state) {
-                        homeViewController.alarms
-                            .firstWhere((element) => alarm.id == element.id)
-                            .enabled = !alarm.enabled;
-                        homeViewController.alarms.refresh();
-
                         if (state) {
                           homeViewController.setAlarm(alarm);
                         } else {

@@ -4,6 +4,7 @@ import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:device_calendar/device_calendar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:get/get.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
@@ -18,6 +19,7 @@ class HomeViewController extends GetxController {
 
   final HomeEvents homeEvents;
   RxList<Alarm> alarms = <Alarm>[].obs;
+  RxList<Weather> nextSevenDaysWeather = <Weather>[].obs;
   late Rx<Weather> weather;
   late Position? currentPosition;
 
@@ -28,7 +30,7 @@ class HomeViewController extends GetxController {
     alarms.addAll([
       Alarm(
         id: 1,
-        time: DateTime.parse("2023-03-18 02:20:00"),
+        time: DateTime.parse("2023-03-18 08:20:00"),
         enabled: false,
         audioPath: "assets/audios/1.mp3",
         daysToRepeat: [Days.monday, Days.thursday],
@@ -69,7 +71,8 @@ class HomeViewController extends GetxController {
   void onReady() async {
     super.onReady();
 
-    updateWeather();
+    getWeather()
+        .then((List<Weather> value) => nextSevenDaysWeather.value = value);
     getCalendarsEvents().then((List<Event> value) => {
           for (Alarm alarm in alarms)
             {
@@ -84,7 +87,8 @@ class HomeViewController extends GetxController {
         });
 
     Timer.periodic(const Duration(minutes: 5), (timer) {
-      updateWeather();
+      getWeather()
+          .then((List<Weather> value) => nextSevenDaysWeather.value = value);
     });
   }
 
@@ -99,13 +103,13 @@ class HomeViewController extends GetxController {
     if (alarm.time.isBefore(DateTime.now())) {
       DateTime now = DateTime.now();
       DateTime t = now.add(const Duration(days: 1));
-      if (alarm.time.day != now.day) {
-        t = now;
-      }
       alarmTime =
           DateTime(t.year, t.month, t.day, alarm.time.hour, alarm.time.minute);
       alarms.firstWhere((element) => element.id == alarm.id).time = alarmTime;
     }
+
+    alarms.firstWhere((element) => alarm.id == element.id).enabled = true;
+    alarms.refresh();
 
     await AndroidAlarmManager.oneShotAt(
       alarm.time,
@@ -132,10 +136,12 @@ class HomeViewController extends GetxController {
 
   Future cancelAlarm(Alarm alarm) async {
     await AndroidAlarmManager.cancel(alarm.id);
+    alarms.firstWhere((element) => alarm.id == element.id).enabled = false;
+    alarms.refresh();
     debugPrint("Alarm cancelled");
   }
 
-  Future updateWeather() async {
+  Future<List<Weather>> getWeather() async {
     currentPosition = await _determinePosition();
     homeEvents
         .getWeather(
@@ -151,6 +157,8 @@ class HomeViewController extends GetxController {
         debugPrint("Error: $error");
       },
     );
+
+    return [];
   }
 
   Future<List<Event>> getCalendarsEvents() async {
